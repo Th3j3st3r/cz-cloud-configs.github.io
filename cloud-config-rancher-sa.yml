@@ -1,0 +1,21 @@
+#cloud-config
+EXTRA_CMDLINE: /init
+rancher:
+  environment:
+    EXTRA_CMDLINE: /init
+  hostname: cz-docker-host
+  network:
+    dns:
+      nameservers:
+      - 10.27.1.60
+      - 10.27.1.70
+    interfaces:
+      eth0:
+        address: 10.17.65.100/24
+        dhcp: false
+        gateway: 10.17.65.1
+        mtu: 1500
+ssh_authorized_keys:
+- ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDIxWKOZwVUnePMPwnzfJv4TOE+LrFRiC6bE0B6y2mQ6gBEQws80l3eIJ1VsAsrdP025gAYczHqirgrWkZlG5ev0LnmIEsXNogitk00wsp80LUGhZYTgYICRfJIrESvFU04CK7QW3+xh25JChGrLrR/XWI9ht3wQ5k9mAm10Gz+F9wBHV1iAl2sxLYP9KTGaqiSf0T1FSKX5gCnAVgGphQ1hYDLShw1ZuzbDHZgaHqaE7Rs3JthhrFDPVkZFiOM+w/AMjqLsqdFUGyj1ixnHg0NfT/b4g0ZmQrjE0uf4E+4RasoRdZOKYKbJLEXwpUYvq8CiSLD3xqtXrtjXIXIHZ4h jester@PortoPlozo
+- ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCrNAuRUi2esT4bHgusbMqa6LUZvnhVYp/KxRw82HBYykCiFg/wfCsx7iWDzwiAQ9hCRU6mPr4aGxiGwtyhn2M0WEQS3YkzfaQgEDOmxnvWkLO+FnSpwFLuQJpfsTCeTljd7kfeumn/Nw07SbhmbhjESy2qB0Xvtd7akvis9kHsrYdR56u/SsTn4RKbbnWhUnJppBrl8qTxIzvel3ScVkayNmzcPjOm7QL4AMk2BSkUgIcwpD8AMiYt70b+faN5jk9c5Bzb49k0DWg/9gYU0olIaZV5DNHi9VyAaSAHA2+33C/Itad5pQFKPjwn8aLlezN+ohGzQISX8Wboh/GPjww1 czangerle@LAP-CZANGERLE
+- ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC4DNYmiPVVYQtksvgFXH/BMaEv7jo5JmuH95z99XxOGkJ8dihWVdx8IOK9UIXQ7+e/n78tHR2NInFCzBRtHPGsn5ZJzEMnjnjz6K7tmEBYDyVVkKQ+xIqLHvZZPSzihrWJJhsD7q44JEt/ye5C02Ck7nhRzNTwTMJGnU3qy+eK56PL9AHsU5MUpnP8p1AvkK0v5QovnnEj3b2+/anH2XxFLWSi66T7WqvBToEhkXtd83GUBLFFZLIO7LPLgMsDld7pkMGRFfcZln7mgvnXU7NGPf+fxZFRVhGgRKqwUF1sO1B29/WVWm5IJTnDhC7XgoyGkIFeeyyZ1mkji9fXlMaz athoenig@barracuda.com
