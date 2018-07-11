@@ -1,6 +1,7 @@
 #cloud-config
 EXTRA_CMDLINE: /init
 rancher:
+  console: ubuntu
   environment:
     EXTRA_CMDLINE: /init
   hostname: cz-docker-host
