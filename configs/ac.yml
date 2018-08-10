@@ -1,0 +1,97 @@
+#cloud-config
+rancher:
+  console: ubuntu
+  hostname: cz-allmighty
+  network:
+    dns:
+      nameservers:
+      - 10.17.6.120
+    interfaces:
+      eth0:
+        address: 10.17.36.100/24
+        dhcp: false
+        gateway: 10.17.36.1
+        mtu: 1500
+runcmd:
+  - sudo mkdir -p /var/data
+
+write_files:
+- owner: rancher
+  path: /etc/docker/certs.d/10.17.65.2:5000/ca.crt
+  permissions: "0644"
+  content: |+
+    -----BEGIN CERTIFICATE-----
+    MIIEVTCCAz2gAwIBAgIBATANBgkqhkiG9w0BAQsFADCBszELMAkGA1UEBhMCQVQx
+    DjAMBgNVBAgTBVR5cm9sMRIwEAYDVQQHEwlJbm5zYnJ1Y2sxGzAZBgNVBAoTEkJh
+    cnJhY3VkYSBOZXR3b3JrczEmMCQGA1UECxMdTkcgRmlyZXdhbGwgUXVhbGl0eSBB
+    c3N1cmFuY2UxEDAOBgNVBAMTB1FBIFJvb3QxKTAnBgkqhkiG9w0BCQEWGm1ncm9z
+    c2hhdXNlckBiYXJyYWN1ZGEuY29tMB4XDTE1MDUxMzE2MTkwMFoXDTI1MDUxMzE2
+    MTkwMFowgbMxCzAJBgNVBAYTAkFUMQ4wDAYDVQQIEwVUeXJvbDESMBAGA1UEBxMJ
+    SW5uc2JydWNrMRswGQYDVQQKExJCYXJyYWN1ZGEgTmV0d29ya3MxJjAkBgNVBAsT
+    HU5HIEZpcmV3YWxsIFF1YWxpdHkgQXNzdXJhbmNlMRAwDgYDVQQDEwdRQSBSb290
+    MSkwJwYJKoZIhvcNAQkBFhptZ3Jvc3NoYXVzZXJAYmFycmFjdWRhLmNvbTCCASIw
+    DQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMi18E3jeRafibqkWEvKWgX5nsmw
+    GQfJ1o77UDDRQD9YOjA3WhD1wUf/t5gnZ9ICS2dlPCwz6/lRkv+AYJBBfB0+ggf5
+    qCb90lHCTLlS5QQ8RwdAI/4hY0cs0LeO1Uc9dz9qxM0Q5F2RUclyq9lUr7G05Y8j
+    jL3IQGDFn51Y80yjH/QXbS18SXnqX6UilwhnR+z5wqPfyEL9xgdpGfD1rpqst4PO
+    joCAFKrfPEJKwRybxntzLZGtWwiXTw0bjKzlB0ybISCQlO7LYMjwUKGQKpnL5RIV
+    P31ydyzOL/ruAwZoi6G0kmd9CV0HEj0VJxmnUKdQy5TQ8w8PN33lDU71+V0CAwEA
+    AaNyMHAwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUQDE237rS9zaiSz+A2nap
+    hU5OTuQwCwYDVR0PBAQDAgEGMBEGCWCGSAGG+EIBAQQEAwIABzAeBglghkgBhvhC
+    AQ0EERYPeGNhIGNlcnRpZmljYXRlMA0GCSqGSIb3DQEBCwUAA4IBAQBCT3fTaXZL
+    ATQtObOd3vcXCpyWQpa0DUP0JU3kpfw1QOGhHcvZKuuhkOUdb3zP2VHANez3bL3Z
+    crIjAcxKa2PMsx9CyczTGXMfMbyearQF1HqRl747+tqcxUBwyCAjFsVrKvoPZjgF
+    /gUpm/SmzyhgL6zvCZZHc1rGuxOm8byFc2MGLQNBtMPOSDSwExbVJSFlRn0ZHTCn
+    +14Xl9z/Ia2ZQEPlXzAHdL9IRThiOJMnFxs1u9XbajQCVPL4MAIDpzyDsnu8uwEP
+    60GvkjQcooz1/1hL/PQzGdeigNRClagpLcGY+3O+4x4vkJjWuZcuc5+g5gycWgal
+    ufdPjWGc35FL
+    -----END CERTIFICATE-----
+
+- owner: rancher
+  path: /home/rancher/install.sh
+  permissions: "777"
+  content: |
+    sudo apt-get update && sudo apt-get install dnsutils dos2unix git nfs-common -y
+    sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+    sudo chmod +x /usr/local/bin/docker-compose
+    cd /var/data/notebooks
+    base=https://github.com/docker/machine/releases/download/v0.14.0 && curl -L $base/docker-machine-$(uname -s)-$(uname -m) >/tmp/docker-machine && sudo install /tmp/docker-machine /usr/local/bin/docker-machine
+    sudo echo '10.17.36.100:/var/date    /var/data      nfs       rw,soft,intr,noatime,x-gvfs-show' >> /etc/fstab
+    sudo mount -a
+
+- owner: rancher
+  path: /home/rancher/.ssh/id_rsa
+  permissions: "700"
+  content: |
+  -----BEGIN RSA PRIVATE KEY-----
+  MIIEowIBAAKCAQEAqzQLkVItnrE+Gx4LrGzKmui1Gb54VWKfysUcPNhwWMpAohYP
+  8HwrMe4lg88IgEPYQkVOpj6+GhsYhsLcoZ9jNFhEEt2JM32kIBAzpsZ71pCzvhZ0
+  qcBS7kCaX7Ewnk5Y3e5H3rpp/zcNO0m4Zm4YxEstqgdF77Xe2pL4rPZB7K2HUeer
+  v0rE5+ESm251oVJyaaQa5fKk8SM73pd0nFZGsjZs3D4zpu0C+ADJNgUpFICHMKQ/
+  ADImLe9G/n2jeY5PXOQc2+PZNA1oP/YGFNKJSGmVeQzR4vVcgGkgBwNvt9wvyLWn
+  eaUBSj48J/Gi5XszfqIRs0CEl/Fm6Ifxj48MNQIDAQABAoIBAHP5RpjDrWmhsWuX
+  N9suuzSizQNKdqOIsqweSFmjWL+dCpmCDnwe8Pfa1gjq91xEGTwTTQrq18ZBcqTf
+  XawSl5Y+8KZC8g0yYDrkHsksDXm0/j2XYqIXSVZh5vFJy6CBfEuifYcQins7ZLgz
+  4Tlp/VcDgkR6ttKCRhuUkeZAzzmu2zlZlgQYg8NqpmbQqeaEF73OZLj4nhFa1f5H
+  x/YizDzyUXKO9H18xVdEhQ6ZXvqa1U7uyMFuSGMstdjUsYnJEo8OGccEsMwUVFrA
+  espV6VRWhbhb37e9+B61xTY8nRsB0dEgvmY+0ArW2rTAokG6UbW6ByBRnvzrHW6v
+  Hcgc16ECgYEA3UGjOCkqfD+BrTKU5btOWEV5JbCX8AY9r241cgX3VvdtUcdys7GY
+  g3Cn7sgVMGCtT6B/QgtqGm3BCPQv/YMHg3MXCe6wjNVcb28e4Cp4cdBgeLEnlc4c
+  vbFVpTMm45LNVO34pvzI5UmDs7PZKj/QZErHx4gkeEAnBsC3x6my7S0CgYEAxhZO
+  UNQMb8cHwOEo8zH0OEza14y1MW0Y3KYvT3W+8Hgd6QGi9i9AkI0KEhMdJ17ECNnG
+  enYBrqksDQ0qhd7A/T0MCFmrcsr3b132fcAjQUecLzvrBhNNddK0LEWMIf+vstMF
+  A//iEH6+IkZfKWWvfrV6OlTyRM33g1lfT+6NUCkCgYBR32cBciI5hdp7d5sng28T
+  NOoGa1ldxUFwOCzou5JyCO7X8yDbo50XDknmDv3gP/YB4BcXHlgt3W0v3gQgICtY
+  le7xivSjuJQS3CClvLGDFCOOpadLRNDX1NYnYk1CquD2S3TWffXs+o4Uojl669A2
+  PIG+sP8lzD9kvU2EQaRnJQKBgC6HWsn9pRY0aAvUV6wYVcdLtjPfZ0g+2hIqLv65
+  J6qQbGYo7kBphP7vQihQuQ5gYie6D7cANRDzx9cg+pYLZsWVK1hix7TlHA3awmVz
+  VlSlH3iw2FnK+uzsG0oy4+Gwj3KvwoPX/R/mxX6DjSLKMdjPg/Bjt6yVvMfrnEnI
+  PQVRAoGBAL2ikFlH8VlxNQ/t6jEP/twtUpU1Ct2gM8N8YVza85MnCD1idshKf2Gh
+  gpiV4ezn3FMIoWaniCDOB/yo9WEeSrHxSaaeL4vXC8IUH0F5SCNoFWuFa6bKt2qf
+  kAtGg2beAZp2Y6xLsmv5UCJL3V+ujFRjilztN4Acz/C5SpIby6G+
+  -----END RSA PRIVATE KEY-----
+
+ssh_authorized_keys:
+- ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDIxWKOZwVUnePMPwnzfJv4TOE+LrFRiC6bE0B6y2mQ6gBEQws80l3eIJ1VsAsrdP025gAYczHqirgrWkZlG5ev0LnmIEsXNogitk00wsp80LUGhZYTgYICRfJIrESvFU04CK7QW3+xh25JChGrLrR/XWI9ht3wQ5k9mAm10Gz+F9wBHV1iAl2sxLYP9KTGaqiSf0T1FSKX5gCnAVgGphQ1hYDLShw1ZuzbDHZgaHqaE7Rs3JthhrFDPVkZFiOM+w/AMjqLsqdFUGyj1ixnHg0NfT/b4g0ZmQrjE0uf4E+4RasoRdZOKYKbJLEXwpUYvq8CiSLD3xqtXrtjXIXIHZ4h jester@PortoPlozo
+- ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCrNAuRUi2esT4bHgusbMqa6LUZvnhVYp/KxRw82HBYykCiFg/wfCsx7iWDzwiAQ9hCRU6mPr4aGxiGwtyhn2M0WEQS3YkzfaQgEDOmxnvWkLO+FnSpwFLuQJpfsTCeTljd7kfeumn/Nw07SbhmbhjESy2qB0Xvtd7akvis9kHsrYdR56u/SsTn4RKbbnWhUnJppBrl8qTxIzvel3ScVkayNmzcPjOm7QL4AMk2BSkUgIcwpD8AMiYt70b+faN5jk9c5Bzb49k0DWg/9gYU0olIaZV5DNHi9VyAaSAHA2+33C/Itad5pQFKPjwn8aLlezN+ohGzQISX8Wboh/GPjww1 czangerle@LAP-CZANGERLE
+- ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC4DNYmiPVVYQtksvgFXH/BMaEv7jo5JmuH95z99XxOGkJ8dihWVdx8IOK9UIXQ7+e/n78tHR2NInFCzBRtHPGsn5ZJzEMnjnjz6K7tmEBYDyVVkKQ+xIqLHvZZPSzihrWJJhsD7q44JEt/ye5C02Ck7nhRzNTwTMJGnU3qy+eK56PL9AHsU5MUpnP8p1AvkK0v5QovnnEj3b2+/anH2XxFLWSi66T7WqvBToEhkXtd83GUBLFFZLIO7LPLgMsDld7pkMGRFfcZln7mgvnXU7NGPf+fxZFRVhGgRKqwUF1sO1B29/WVWm5IJTnDhC7XgoyGkIFeeyyZ1mkji9fXlMaz athoenig@barracuda.com
