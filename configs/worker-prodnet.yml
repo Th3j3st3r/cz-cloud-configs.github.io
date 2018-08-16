@@ -12,6 +12,9 @@ rancher:
         dhcp: false
         gateway: 10.17.36.1
         mtu: 1500
+      eth1:
+        dhcp: true
+        mtu: 1500
 
 write_files:
 - owner: root
