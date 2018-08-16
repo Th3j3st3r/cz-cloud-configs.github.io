@@ -1,7 +1,6 @@
 #cloud-config
 EXTRA_CMDLINE: /init
 rancher:
-  console: ubuntu
   environment:
     EXTRA_CMDLINE: /init
   hostname: cz-worker-prodnet
@@ -68,7 +67,7 @@ write_files:
   permissions: "777"
   content: |
     cd ~
-    sudo mkdir notebookdemos notebooks autotest certs cloudconfigs dockerbuilds dockercompose
+    mkdir notebookdemos notebooks autotest certs cloudconfigs dockerbuilds dockercompose
     sudo apt-get update && sudo apt-get install dnsutils dos2unix git nfs-common -y
     sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-$(uname -s)-$(uname -m) -o /bin/docker-compose
     sudo chmod +x /bin/docker-compose
