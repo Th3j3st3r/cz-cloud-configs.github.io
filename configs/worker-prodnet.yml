@@ -1,7 +1,10 @@
 #cloud-config
+EXTRA_CMDLINE: /init
 rancher:
   console: ubuntu
-  hostname: bilals-rancher
+  environment:
+    EXTRA_CMDLINE: /init
+  hostname: cz-worker-prodnet
   network:
     dns:
       nameservers:
@@ -67,8 +70,8 @@ write_files:
     cd ~
     sudo mkdir notebookdemos notebooks autotest certs cloudconfigs dockerbuilds dockercompose
     sudo apt-get update && sudo apt-get install dnsutils dos2unix git nfs-common -y
-    sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
-    sudo chmod +x /usr/local/bin/docker-compose
+    sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-$(uname -s)-$(uname -m) -o /bin/docker-compose
+    sudo chmod +x /bin/docker-compose
     base=https://github.com/docker/machine/releases/download/v0.14.0 && curl -L $base/docker-machine-$(uname -s)-$(uname -m) >/tmp/docker-machine && sudo install /tmp/docker-machine /usr/local/bin/docker-machine
     sudo mount -a
     cd ~/dockercompose/jupyter
