@@ -3,6 +3,7 @@ EXTRA_CMDLINE: /init
 rancher:
   environment:
     EXTRA_CMDLINE: /init
+  console: ubuntu
   hostname: cz-worker-prodnet
   network:
     dns:
